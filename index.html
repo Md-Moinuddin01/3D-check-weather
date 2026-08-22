@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skyglass — 3D Weather</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='8' fill='%23fbbf24'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <!-- 3D background canvas -->
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark"></span>
+        <span class="brand-name">Skyglass</span>
+      </div>
+
+      <form id="search-form" class="search" autocomplete="off">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input id="search-input" type="text" placeholder="Search city — try 'London', 'Tokyo', 'Reykjavik'..." aria-label="Search city" />
+        <button type="submit" class="btn-primary">Search</button>
+        <button type="button" id="geo-btn" class="btn-ghost" title="Use my location" aria-label="Use my location">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"></circle>
+            <circle cx="12" cy="12" r="9"></circle>
+            <line x1="12" y1="2" x2="12" y2="5"></line>
+            <line x1="12" y1="19" x2="12" y2="22"></line>
+            <line x1="2" y1="12" x2="5" y2="12"></line>
+            <line x1="19" y1="12" x2="22" y2="12"></line>
+          </svg>
+        </button>
+      </form>
+
+      <div class="unit-toggle" role="group" aria-label="Temperature units">
+        <button class="unit-btn active" data-unit="c" type="button">°C</button>
+        <button class="unit-btn" data-unit="f" type="button">°F</button>
+      </div>
+    </header>
+
+    <main class="grid">
+      <!-- Current conditions -->
+      <section class="card glass current" aria-live="polite">
+        <div class="current-top">
+          <div>
+            <p class="muted small" id="local-time">—</p>
+            <h1 id="city-name" class="city">Loading…</h1>
+            <p id="condition-text" class="condition">—</p>
+          </div>
+          <div class="weather-icon" id="current-icon" aria-hidden="true"></div>
+        </div>
+
+        <div class="temperature">
+          <span id="temp-current" class="temp">--</span><span class="deg" id="temp-unit">°C</span>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-label">Humidity</span>
+            <span class="stat-value" id="humidity">--%</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Wind</span>
+            <span class="stat-value" id="wind">-- km/h</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Feels like</span>
+            <span class="stat-value" id="feels">--°</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Hourly strip -->
+      <section class="card glass hourly-card">
+        <h2 class="card-title">Next 24 hours</h2>
+        <div class="hourly" id="hourly-strip"></div>
+      </section>
+
+      <!-- 7-day forecast -->
+      <section class="card glass daily-card">
+        <h2 class="card-title">7-day forecast</h2>
+        <div class="daily" id="daily-grid"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Data from <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> · 3D by Three.js</p>
+    </footer>
+  </div>
+
+  <!-- Loading overlay -->
+  <div id="loading" class="overlay" hidden>
+    <div class="spinner"></div>
+    <p>Fetching forecast…</p>
+  </div>
+
+  <!-- Toast for errors -->
+  <div id="toast" class="toast" hidden></div>
+
+  <!-- Three.js (bundled locally so the page works offline) -->
+  <script src="three.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
